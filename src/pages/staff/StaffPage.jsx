@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { PATIENT_MESSAGES, GENERAL_MESSAGES } from '../constants/messages';
-import ConfirmModal from '../components/ConfirmModal';
-import Popconfirm from '../components/Popconfirm';
+import { PATIENT_MESSAGES, GENERAL_MESSAGES } from '../../constants/messages';
+import ConfirmModal from '../../components/ConfirmModal';
+import Popconfirm from '../../components/Popconfirm';
 
 // Mock data cho bệnh nhân
 const mockPatients = [

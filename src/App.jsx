@@ -6,10 +6,10 @@ import { Toaster } from 'react-hot-toast';
 import { store } from './store';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardLayout from './layouts/DashboardLayout';
-import LoginPage from './pages/LoginPage';
-import DoctorDashboard from './pages/DoctorDashboard';
-import StaffDashboard from './pages/StaffDashboard';
-import AccountantDashboard from './pages/AccountantDashboard';
+import LoginPage from './pages/login/LoginPage';
+import DoctorPage from './pages/doctor/DoctorPage';
+import StaffPage from './pages/staff/StaffPage';
+import AccountantPage from './pages/accountant/AccountantPage';
 
 function App() {
   return (
@@ -65,7 +65,7 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['doctor']}>
                 <DashboardLayout>
-                  <DoctorDashboard />
+                  <DoctorPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }
@@ -76,7 +76,7 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['staff']}>
                 <DashboardLayout>
-                  <StaffDashboard />
+                  <StaffPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }
@@ -87,7 +87,7 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={['accountant']}>
                 <DashboardLayout>
-                  <AccountantDashboard />
+                  <AccountantPage />
                 </DashboardLayout>
               </ProtectedRoute>
             }
