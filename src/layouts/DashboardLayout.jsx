@@ -42,7 +42,7 @@ const DashboardLayout = ({ children }) => {
       {/* Header cố định */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-14">
             <div className="flex items-center space-x-3">
               {/* Logo */}
               <div className="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center">
@@ -54,7 +54,7 @@ const DashboardLayout = ({ children }) => {
                 <h1 className="text-xl font-bold text-gray-900">
                   MediCel Clinic
                 </h1>
-                <p className="text-xs text-gray-500">Hệ thống quản lý phòng khám</p>
+                {/* <p className="text-xs text-gray-500">Hệ thống quản lý phòng khám</p> */}
               </div>
             </div>
 
@@ -68,7 +68,7 @@ const DashboardLayout = ({ children }) => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   </div>
-                  <div className="text-sm">
+                  <div className="text-sm flex justify-center gap-2">
                     <p className="font-medium text-gray-900">{user?.name}</p>
                     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${getRoleColor(user?.role || '')}`}>
                       {getRoleDisplayName(user?.role || '')}
