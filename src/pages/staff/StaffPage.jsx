@@ -4,11 +4,22 @@ import { PATIENT_MESSAGES, GENERAL_MESSAGES } from '../../constants/messages';
 import ConfirmModal from '../../components/ConfirmModal';
 import Popconfirm from '../../components/Popconfirm';
 
+// Hàm lấy ngày hiện tại theo định dạng YYYY-MM-DD
+const getCurrentDate = () => {
+  const today = new Date();
+  return today.toISOString().split('T')[0];
+};
+
+// Hàm lấy giờ hiện tại theo định dạng HH:MM
+const getCurrentTime = () => {
+  const now = new Date();
+  return now.toTimeString().slice(0, 5);
+};
+
 // Mock data cho bệnh nhân
 const mockPatients = [
   {
     id: 1,
-    stt: 1,
     hoVaTen: 'Nguyễn Thị',
     ten: 'Lan',
     tuoi: 25,
@@ -16,9 +27,12 @@ const mockPatients = [
     xa: 'Phường 1',
     soTien: 150000,
     dienThoai: '0901234567',
-    daSa: 'Chưa',
+    daSA: false,
     bacSi: 'BS Nguyễn Văn A',
-    chuyen: 'Khám tổng quát'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   },
   {
     id: 2,
@@ -30,9 +44,12 @@ const mockPatients = [
     xa: 'Phường 2',
     soTien: 200000,
     dienThoai: '0907654321',
-    daSa: 'Đã',
+    daSA: true,
     bacSi: 'BS Trần Minh Hoàng',
-    chuyen: 'Tim mạch'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   },
   {
     id: 3,
@@ -44,9 +61,12 @@ const mockPatients = [
     xa: 'Xã Tân Phú',
     soTien: 180000,
     dienThoai: '0912345678',
-    daSa: 'Chưa',
+    daSA: false,
     bacSi: 'BS Lê Thị C',
-    chuyen: 'Sản phụ khoa'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   },
   {
     id: 4,
@@ -58,9 +78,12 @@ const mockPatients = [
     xa: 'Phường 3',
     soTien: 250000,
     dienThoai: '0923456789',
-    daSa: 'Đã',
+    daSA: true,
     bacSi: 'BS Nguyễn Văn A',
-    chuyen: 'Nội khoa'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   },
   {
     id: 5,
@@ -72,9 +95,12 @@ const mockPatients = [
     xa: 'Xã Hòa Bình',
     soTien: 120000,
     dienThoai: '0934567890',
-    daSa: 'Chưa',
+    daSA: false,
     bacSi: 'BS Trần Minh Hoàng',
-    chuyen: 'Da liễu'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   },
   {
     id: 6,
@@ -86,9 +112,12 @@ const mockPatients = [
     xa: 'Phường 4',
     soTien: 300000,
     dienThoai: '0945678901',
-    daSa: 'Đã',
+    daSA: true,
     bacSi: 'BS Lê Thị C',
-    chuyen: 'Ngoại khoa'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   },
   {
     id: 7,
@@ -100,9 +129,12 @@ const mockPatients = [
     xa: 'Xã Thanh Hà',
     soTien: 100000,
     dienThoai: '0956789012',
-    daSa: 'Chưa',
+    daSA: false,
     bacSi: 'BS Nguyễn Văn A',
-    chuyen: 'Tai mũi họng'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   },
   {
     id: 8,
@@ -114,9 +146,12 @@ const mockPatients = [
     xa: 'Phường 5',
     soTien: 220000,
     dienThoai: '0967890123',
-    daSa: 'Đã',
+    daSA: true,
     bacSi: 'BS Trần Minh Hoàng',
-    chuyen: 'Mắt'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   },
   {
     id: 9,
@@ -128,9 +163,12 @@ const mockPatients = [
     xa: 'Xã Phú Lộc',
     soTien: 190000,
     dienThoai: '0978901234',
-    daSa: 'Chưa',
+    daSA: false,
     bacSi: 'BS Lê Thị C',
-    chuyen: 'Răng hàm mặt'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   },
   {
     id: 10,
@@ -142,14 +180,17 @@ const mockPatients = [
     xa: 'Phường 6',
     soTien: 160000,
     dienThoai: '0989012345',
-    daSa: 'Đã',
+    daSA: false,
     bacSi: 'BS Nguyễn Văn A',
-    chuyen: 'Thần kinh'
+    daChuyen: false,
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
+    ghiChu: ''
   }
 ];
 
 const StaffDashboard = () => {
-  const [patients, setPatients] = useState(mockPatients.map(p => ({ ...p, daChuyenKhoa: false, daSieuAm: p.daSa === 'Đã' })));
+  const [patients, setPatients] = useState(mockPatients.map(p => ({ ...p })));
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPatients, setSelectedPatients] = useState([]);
   const [doctors, setDoctors] = useState(['BS Nguyễn Văn A', 'BS Trần Minh Hoàng', 'BS Lê Thị C']);
@@ -169,13 +210,12 @@ const StaffDashboard = () => {
     xa: '',
     soTien: '',
     dienThoai: '',
-    daSa: false,
+    daSA: false,
     bacSi: '',
-    ngayKham: '',
-    gioKham: '',
+    ngayKham: getCurrentDate(),
+    gioKham: getCurrentTime(),
     ghiChu: '',
-    daChuyenKhoa: false,
-    daSieuAm: false
+    daChuyen: false
   });
 
   // Filter patients based on search criteria
@@ -192,7 +232,7 @@ const StaffDashboard = () => {
     );
   });
 
-  // Thêm bệnh nhân mới (luôn thêm mới)
+  // Thêm bệnh nhân mới (luôn thêm mới) - KHÔNG reset form
   const handleAddPatient = () => {
     const patient = {
       id: Date.now(),
@@ -200,13 +240,12 @@ const StaffDashboard = () => {
       ...newPatient,
       soTien: parseInt(newPatient.soTien) || 0,
       tuoi: parseInt(newPatient.tuoi) || 0,
-      chuyen: 'Khám tổng quát',
-      daChuyenKhoa: false,
-      daSieuAm: newPatient.daSa
+      daChuyen: newPatient.daChuyen,
+      daSA: newPatient.daSA
     };
 
     setPatients([...patients, patient]);
-    resetForm();
+    // Không reset form - giữ dữ liệu để tiếp tục nhập
     toast.success(PATIENT_MESSAGES.CREATE_SUCCESS);
   };
 
@@ -223,13 +262,12 @@ const StaffDashboard = () => {
         xa: patient.xa,
         soTien: patient.soTien.toString(),
         dienThoai: patient.dienThoai,
-        daSa: patient.daSieuAm,
+        daSA: patient.daSA,
         bacSi: patient.bacSi,
-        ngayKham: '',
-        gioKham: '',
-        ghiChu: '',
-        daChuyenKhoa: patient.daChuyenKhoa,
-        daSieuAm: patient.daSieuAm
+        ngayKham: patient.ngayKham || getCurrentDate(),
+        gioKham: patient.gioKham || getCurrentTime(),
+        ghiChu: patient.ghiChu || '',
+        daChuyen: patient.daChuyen
       });
     }
   };
@@ -245,7 +283,8 @@ const StaffDashboard = () => {
           ...newPatient,
           soTien: parseInt(newPatient.soTien) || 0,
           tuoi: parseInt(newPatient.tuoi) || 0,
-          daSieuAm: newPatient.daSa
+          daChuyen: newPatient.daChuyen,
+          daSA: newPatient.daSA
         }
         : p
     ));
@@ -275,13 +314,12 @@ const StaffDashboard = () => {
       xa: '',
       soTien: '',
       dienThoai: '',
-      daSa: false,
+      daSA: false,
       bacSi: '',
-      ngayKham: '',
-      gioKham: '',
+      ngayKham: getCurrentDate(),
+      gioKham: getCurrentTime(),
       ghiChu: '',
-      daChuyenKhoa: false,
-      daSieuAm: false
+      daChuyen: false
     });
   };
 
@@ -311,26 +349,26 @@ const StaffDashboard = () => {
     }
     setPatients(prev => prev.map(p =>
       selectedPatients.includes(p.id)
-        ? { ...p, daChuyenKhoa: true }
+        ? { ...p, daChuyen: !p.daChuyen }
         : p
     ));
     setSelectedPatients([]);
-    toast.success(`Đã chuyển khoa ${selectedPatients.length} bệnh nhân`);
+    toast.success(`Cập nhật ${selectedPatients.length} bệnh nhân`);
   };
 
   // Đánh dấu đã siêu âm
   const handleDaSieuAm = () => {
     if (selectedPatients.length === 0) {
-      toast.error('Vui lòng chọn bệnh nhân đã siêu âm');
+      toast.error('Vui lòng chọn bệnh nhân cần cập nhật siêu âm');
       return;
     }
     setPatients(prev => prev.map(p =>
       selectedPatients.includes(p.id)
-        ? { ...p, daSieuAm: true }
+        ? { ...p, daSA: !p.daSA }
         : p
     ));
     setSelectedPatients([]);
-    toast.success(`Đã đánh dấu siêu âm ${selectedPatients.length} bệnh nhân`);
+    toast.success(`Đã cập nhật trạng thái siêu âm cho ${selectedPatients.length} bệnh nhân`);
   };
 
   // Xóa nhiều bệnh nhân
@@ -404,7 +442,7 @@ const StaffDashboard = () => {
               onClick={resetForm}
               className="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
             >
-              ➕ Thêm
+              ➕ Mới
             </button>
             <button
               onClick={handleDeleteSelected}
@@ -516,7 +554,7 @@ const StaffDashboard = () => {
           </div>
 
           {/* Số tiền */}
-          <div className="col-span-1">
+          <div className="col-span-2">
             <label className="block text-xs font-medium text-gray-700 mb-1">Tiền</label>
             <input
               type="number"
@@ -540,19 +578,8 @@ const StaffDashboard = () => {
             />
           </div>
 
-          {/* Đã SA */}
-          <div className="col-span-1 text-center">
-            <label className="block text-xs font-medium text-gray-700 mb-1">SA</label>
-            <input
-              type="checkbox"
-              className="rounded text-blue-600 focus:ring-blue-500"
-              checked={newPatient.daSa}
-              onChange={(e) => handleInputChange('daSa', e.target.checked)}
-            />
-          </div>
-
           {/* Bác sĩ chuyên */}
-          <div className="col-span-2">
+          <div className="col-span-3">
             <label className="block text-xs font-medium text-gray-700 mb-1">Bác sĩ</label>
             <div className="flex">
               <select
@@ -619,7 +646,7 @@ const StaffDashboard = () => {
           </div>
 
           {/* Ghi chú */}
-          <div className="col-span-4">
+          <div className="col-span-3">
             <label className="block text-xs font-medium text-gray-700 mb-1">Ghi chú</label>
             <input
               type="text"
@@ -631,7 +658,7 @@ const StaffDashboard = () => {
           </div>
 
           {/* Nút action */}
-          <div className="col-span-2 flex justify-end space-x-2">
+          <div className="col-span-2 flex justify-end space-x-2 mt-4">
             {editingPatient ? (
               <>
                 <button
@@ -651,7 +678,7 @@ const StaffDashboard = () => {
               <>
                 <button
                   onClick={handleAddPatient}
-                  className="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
+                  className="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
                 >
                   ➕ Thêm
                 </button>
@@ -690,8 +717,9 @@ const StaffDashboard = () => {
               <th className="border border-gray-300 px-2 py-2 text-left font-medium">SỐ TIỀN</th>
               <th className="border border-gray-300 px-2 py-2 text-left font-medium">ĐIỆN THOẠI</th>
               <th className="border border-gray-300 px-2 py-2 text-left font-medium">ĐÃ SA</th>
-              <th className="border border-gray-300 px-2 py-2 text-left font-medium">BÁC SĨ CHUYÊN</th>
+              <th className="border border-gray-300 px-2 py-2 text-left font-medium">BÁC SĨ</th>
               <th className="border border-gray-300 px-2 py-2 text-left font-medium">ĐÃ CHUYỂN</th>
+              <th className="border border-gray-300 px-2 py-2 text-left font-medium">Ghi chú</th>
               <th className="border border-gray-300 px-2 py-2 text-left font-medium">THAO TÁC</th>
             </tr>
           </thead>
@@ -715,7 +743,7 @@ const StaffDashboard = () => {
                       className="rounded"
                     />
                   </td>
-                  <td className="border border-gray-300 px-2 py-2 text-center font-medium">{patient.stt}</td>
+                  <td className="border border-gray-300 px-2 py-2 text-center font-medium">{index + 1}</td>
                   <td className="border border-gray-300 px-2 py-2 font-medium text-blue-700">{patient.hoVaTen}</td>
                   <td className="border border-gray-300 px-2 py-2">{patient.ten}</td>
                   <td className="border border-gray-300 px-2 py-2 text-center">{patient.tuoi}</td>
@@ -731,18 +759,19 @@ const StaffDashboard = () => {
                   </td>
                   <td className="border border-gray-300 px-2 py-2 font-mono">{patient.dienThoai}</td>
                   <td className="border border-gray-300 px-2 py-2 text-center">
-                    <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${patient.daSieuAm ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'
+                    <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${patient.daSA ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'
                       }`}>
-                      {patient.daSieuAm ? '✓' : '○'}
+                      {patient.daSA ? '✓' : '○'}
                     </span>
                   </td>
                   <td className="border border-gray-300 px-2 py-2 text-blue-600">{patient.bacSi}</td>
                   <td className="border border-gray-300 px-2 py-2 text-center">
-                    <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${patient.daChuyenKhoa ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400'
+                    <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${patient.daChuyen ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-400'
                       }`}>
-                      {patient.daChuyenKhoa ? '✓' : '○'}
+                      {patient.daChuyen ? '✓' : '○'}
                     </span>
                   </td>
+                  <td className="border border-gray-300 px-2 py-2">{patient.ghiChu}</td>
                   <td className="border border-gray-300 px-2 py-2 text-center">
                     <div className="flex justify-center space-x-1">
                       <button
